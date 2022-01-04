@@ -50,26 +50,32 @@ function XPMeter:new(name)
     return res
 end
 
-local session_meter = XPMeter:new("Session")
-local instance_meter = nil
+local Addon = {
+    session_meter = XPMeter:new("Session"),
+    instance_meter = nil
+}
+
+function Addon:PLAYER_XP_UPDATE()
+    self.session_meter:accountForNewXp()
+    if self.instance_meter ~= nil then
+        self.instance_meter:accountForNewXp()
+    end
+end
+
+function Addon:PLAYER_ENTERING_WORLD()
+    if IsInInstance() then
+        local instance_name = GetInstanceInfo()
+        self.instance_meter = XPMeter:new(instance_name)
+    elseif self.instance_meter then
+        print(self.instance_meter:toString())
+        self.instance_meter = nil
+    end
+end
 
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PLAYER_XP_UPDATE")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 
-frame:SetScript("OnEvent", function(f, event_name)
-    if event_name == "PLAYER_XP_UPDATE" then
-        session_meter:accountForNewXp()
-        if instance_meter ~= nil then
-            instance_meter:accountForNewXp()
-        end
-    elseif event_name == "PLAYER_ENTERING_WORLD" then
-        local inInstance, instanceType = IsInInstance()
-        if inInstance == 1 then
-            instance_meter = XPMeter:new("Instance")
-        else
-            print(instance_meter.toString())
-            instance_meter = nil
-        end
-    end
+frame:SetScript("OnEvent", function(f, event_name, ...)
+    Addon[event_name](Addon, ...)
 end)
