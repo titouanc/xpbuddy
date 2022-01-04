@@ -26,11 +26,11 @@ local XPMeter = {
         local dt = GetTime() - self.start_time;
 
         return string.format(
-            "XP gained: %d (%d/min) / Lvl gained: %.3f (%.3f/hour)",
+            "XP gained: %d (%d/min) / Lvl gained: %d%% (%d%%/hour)",
             self.total_gained_xp,
             60 * self.total_gained_xp / dt,
-            self.total_gained_lvl,
-            3600 * self.total_gained_lvl / dt
+            100 * self.total_gained_lvl,
+            100 * 3600 * self.total_gained_lvl / dt
         )   
     end
 }
