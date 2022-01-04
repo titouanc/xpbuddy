@@ -52,11 +52,11 @@ local session_meter = XPMeter:new()
 local instance_meter = nil
 
 local frame = CreateFrame("Frame")
-frame:RegisterEvent("CHAT_MSG_COMBAT_XP_GAIN")
+frame:RegisterEvent("PLAYER_XP_UPDATE")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 frame:SetScript("OnEvent", function(f, event_name)
-    if event_name == "CHAT_MSG_COMBAT_XP_GAIN" then
+    if event_name == "PLAYER_XP_UPDATE" then
         session_meter:accountForNewXp()
         if instance_meter ~= nil then
             instance_meter:accountForNewXp()
