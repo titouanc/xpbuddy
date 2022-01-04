@@ -1,80 +1,60 @@
-local XPMeter = {
-    accountForNewXp = function (self)
-        local current_xp = UnitXP("player")
-        local current_xp_max = UnitXPMax("player")
-
-        local increment_xp
-        local increment_lvl
-
-        if current_xp < self.last_known_xp then
-            -- Level up; ding!
-            local prev_lvl_increment_xp = self.last_known_xp_max - self.last_known_xp
-            increment_xp = prev_lvl_increment_xp + current_xp
-            increment_lvl = prev_lvl_increment_xp/self.last_known_xp_max + current_xp/current_xp_max
-        else
-            increment_xp = current_xp - self.last_known_xp
-            increment_lvl = increment_xp/current_xp_max
-        end
-
-        self.total_gained_xp = self.total_gained_xp + increment_xp
-        self.total_gained_lvl = self.total_gained_lvl + increment_lvl
-        self.last_known_xp = current_xp
-        self.last_known_xp_max = current_xp_max
-    end,
-
-    toString = function (self)
-        local dt = GetTime() - self.start_time;
-
-        return string.format(
-            "(%s) XP gained: %d (%d/min) / Lvl gained: %d%% (%d%%/hour)",
-            self.name,
-            self.total_gained_xp,
-            60 * self.total_gained_xp / dt,
-            100 * self.total_gained_lvl,
-            100 * 3600 * self.total_gained_lvl / dt
-        )   
-    end
-}
-
-function XPMeter:new(name)
-    local res = {
-        name = name,
-        start_time = GetTime(),
-        last_known_xp = UnitXP("player"),
-        last_known_xp_max = UnitXPMax("player"),
-        total_gained_xp = 0,
-        total_gained_lvl = 0,
-    }
-    setmetatable(res, self)
-    self.__index = self
-    return res
-end
+if not XPMeter then return end
 
 local Addon = {
-    session_meter = XPMeter:new("Session"),
-    instance_meter = nil
+    session = XPMeter:forPlayer("Session"),
+    pets = {},
+    current_pet = nil,
+    instances = {},
+    current_instance = nil,
 }
-
-function Addon:PLAYER_XP_UPDATE()
-    self.session_meter:accountForNewXp()
-    if self.instance_meter ~= nil then
-        self.instance_meter:accountForNewXp()
-    end
-end
 
 function Addon:PLAYER_ENTERING_WORLD()
     if IsInInstance() then
         local instance_name = GetInstanceInfo()
-        self.instance_meter = XPMeter:new(instance_name)
-    elseif self.instance_meter then
-        print(self.instance_meter:toString())
-        self.instance_meter = nil
+        if not self.instances[instance_name] then
+            self.instances[instance_name] = XPMeter:forPlayer(instance_name)
+        end
+        self.current_instance = self.instances[instance_name]
+        self.current_instance:start()
+    elseif self.current_instance then
+        self.current_instance:stop()
+        print(self.current_instance:toString())
+        self.current_instance = nil
     end
+end
+
+function Addon:PLAYER_XP_UPDATE()
+    self.session:accountForNewXp()
+    if self.current_instance then
+        self.current_instance:accountForNewXp()
+    end
+end
+
+function Addon:UNIT_PET()
+    local pet_name = UnitName("pet")
+
+    if pet_name then
+        if not self.pets[pet_name] then
+            self.pets[pet_name] = XPMeter:forPet(pet_name)
+        end
+        self.current_pet = self.pets[pet_name]
+        self.current_pet:start()
+    elseif self.current_pet then
+        self.current_pet:stop()
+        print(self.current_pet:toString())
+        self.current_pet = nil
+    end
+end
+
+function Addon:UNIT_PET_EXPERIENCE()
+    self.current_pet:accountForNewXp()
 end
 
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PLAYER_XP_UPDATE")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+frame:RegisterEvent("UNIT_PET")
+frame:RegisterEvent("UNIT_PET_EXPERIENCE")
 
 frame:SetScript("OnEvent", function(f, event_name, ...)
     Addon[event_name](Addon, ...)
