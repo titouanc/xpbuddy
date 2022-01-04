@@ -48,12 +48,25 @@ function XPMeter:accountForNewXp()
     self.last_known_xp_max = current_xp_max
 end
 
+function XPMeter:totalTime()
+    local dt = GetTime() - self.start_time
+    if self.stopped then
+        return self.accumulated_time
+    else
+        return dt + self.accumulated_time
+    end
+end
+
 function XPMeter:toString()
-    local dt = GetTime() - self.start_time + self.accumulated_time;
+    local dt = self:totalTime()
+
+    local hours = math.floor(dt / 3600)
+    local minutes = math.floor(dt / 60) % 60
+    local seconds = math.floor(dt) % 60
 
     return string.format(
-        "(%s) XP gained: %d (%d/min) / Lvl gained: %d%% (%d%%/hour)",
-        self.name,
+        "(%s - %d:%02d:%02d) XP gained: %d (%d/min) / Lvl gained: %d%% (%d%%/hour)",
+        self.name, hours, minutes, seconds,
         self.total_gained_xp,
         60 * self.total_gained_xp / dt,
         100 * self.total_gained_lvl,
@@ -65,12 +78,13 @@ function XPMeter:start()
     if self.stopped then
         self.start_time = GetTime()
         self.last_known_xp, self.last_known_xp_max = self.getCurrentXp()
+        self.stopped = false
     end
 end
 
 function XPMeter:stop()
     if not self.stopped then
-        self.accumulated_time = self.accumulated_time + (GetTime() - self.start_time)
+        self.accumulated_time = self:totalTime()
         self.stopped = true
     end
 end

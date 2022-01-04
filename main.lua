@@ -47,7 +47,9 @@ function Addon:UNIT_PET()
 end
 
 function Addon:UNIT_PET_EXPERIENCE()
-    self.current_pet:accountForNewXp()
+    if self.current_pet then
+        self.current_pet:accountForNewXp()
+    end
 end
 
 local frame = CreateFrame("Frame")
