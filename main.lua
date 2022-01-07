@@ -52,6 +52,24 @@ function Addon:UNIT_PET_EXPERIENCE()
     end
 end
 
+SLASH_XPMETER1 = "/xpmeter"
+SlashCmdList["XPMETER"] = function(msg)
+    print(Addon.session:toString())
+    if #Addon.instances > 0 then
+        print("Instances:")
+        for _, instance in ipairs(Addon.instances) do
+            print("-" .. instance:toString())
+        end
+    end
+    if #Addon.pets > 0 then
+        print("Pets:")
+        for _, pet in ipairs(Addon.pets) do
+            print("-" .. pet:toString())
+        end
+    end
+end
+
+
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PLAYER_XP_UPDATE")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
