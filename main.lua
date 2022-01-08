@@ -1,12 +1,16 @@
 if not XPMeter then return end
 
-local Addon = {
-    session = XPMeter:forPlayer("Session"),
-    pets = {},
-    current_pet = nil,
-    instances = {},
-    current_instance = nil,
-}
+local Addon = {}
+
+function Addon:init()
+    self.session = XPMeter:forPlayer("Session")
+    self.pets = {}
+    self.current_pet = nil
+    self.instances = {}
+    self.current_instance = nil
+end
+
+Addon:init()
 
 function Addon:PLAYER_ENTERING_WORLD()
     if IsInInstance() then
@@ -57,14 +61,14 @@ SlashCmdList["XPMETER"] = function(msg)
     print(Addon.session:toString())
     if #Addon.instances > 0 then
         print("Instances:")
-        for _, instance in ipairs(Addon.instances) do
-            print("-" .. instance:toString())
+        for _, instance in pairs(Addon.instances) do
+            print("- " .. instance:toString())
         end
     end
     if #Addon.pets > 0 then
         print("Pets:")
-        for _, pet in ipairs(Addon.pets) do
-            print("-" .. pet:toString())
+        for _, pet in pairs(Addon.pets) do
+            print("- " .. pet:toString())
         end
     end
 end
@@ -79,3 +83,5 @@ frame:RegisterEvent("UNIT_PET_EXPERIENCE")
 frame:SetScript("OnEvent", function(f, event_name, ...)
     Addon[event_name](Addon, ...)
 end)
+
+return Addon

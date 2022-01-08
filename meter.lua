@@ -65,7 +65,7 @@ function XPMeter:toString()
     local seconds = math.floor(dt) % 60
 
     return string.format(
-        "(%s - %d:%02d:%02d) XP gained: %d (%d/min) / Lvl gained: %d%% (%d%%/hour)",
+        "%s (%d:%02d:%02d) Gained %dxp (%dxp/min) / Lvl: %d%% (%d%%/h)",
         self.name, hours, minutes, seconds,
         self.total_gained_xp,
         60 * self.total_gained_xp / dt,
