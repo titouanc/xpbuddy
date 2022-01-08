@@ -1,7 +1,7 @@
 ## Interface: 20502
 ## Title: XPMeter
 ## Author: iTitou
-## Version: 0.0.1
+## Version: ${VERSION}
 
 meter.lua
 main.lua
