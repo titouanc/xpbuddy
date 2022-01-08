@@ -5,7 +5,7 @@ all: test dist
 dist: xpmeter-$(VERSION).zip
 
 test:
-	lua test.lua
+	lua runtests.lua
 
 clean:
 	rm -rf xpmeter *.zip
