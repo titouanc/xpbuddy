@@ -16,7 +16,7 @@ jobs:
     - name: Install Lua
       run: |
         sudo apt update
-        sudo apt install --no-install-recommends -y lua
+        sudo apt install --no-install-recommends -y lua5.1
 
     - name: Run tests
       run: make test  
