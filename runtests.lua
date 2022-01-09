@@ -50,6 +50,15 @@ function assertEqual(expected, actual)
     end
 end
 
+function assertConsoleContains(text)
+    for _, msg in ipairs(Console) do
+        if text == msg then
+            return
+        end
+    end
+    error("Could not find '" .. text .. "' in the console")
+end
+
 local function beforeTestFunction()
     Console = {}
     for func_name, default_value in pairs(mock_functions) do

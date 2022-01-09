@@ -56,6 +56,9 @@ function test_change_pet()
     assertEqual(5, #Console)
     assertEqual("Session (0:00:20) Gained 0xp (0xp/min) / Lvl: 0% (0%/h)", Console[2])
     assertEqual("Pets:", Console[3])
-    assertEqual("- Leo (0:00:10) Gained 0xp (0xp/min) / Lvl: 0% (0%/h)", Console[4])
-    assertEqual("- Stan (0:00:00) Gained 0xp (0xp/min) / Lvl: 0% (0%/h)", Console[5])
+
+    -- Order of elements is not fixed in a key=value Lua table, so the table
+    -- pets={pet_name = meter} can be printed in any order
+    assertConsoleContains("- Leo (0:00:10) Gained 0xp (0xp/min) / Lvl: 0% (0%/h)")
+    assertConsoleContains("- Stan (0:00:00) Gained 0xp (0xp/min) / Lvl: 0% (0%/h)")
 end
