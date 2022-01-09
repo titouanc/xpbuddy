@@ -26,6 +26,7 @@ function test_gain_player_xp_in_world()
     assertEqual(0, #Addon.instances)
     assertEqual(0, #Addon.pets)
 
+    -- Calling the slash command
     SlashCmdList["XPBUDDY"]()
     assertEqual(1, #Console)
     assertEqual("Session (0:00:20) Gained 130xp (390xp/min) / Lvl: 115% (20700%/h)", Console[1])
@@ -60,6 +61,7 @@ function test_gain_player_xp_in_instance()
     assertEqual(nil, Addon.current_instance)
     assertEqual(20, Addon.session:totalTime())
     assertEqual(20, Addon.instances["BRD"]:totalTime())
+    -- When we leave the instance we should get a message on the console
     assertEqual(1, #Console)
     assertEqual("BRD (0:00:20) Gained 30xp (90xp/min) / Lvl: 30% (5400%/h)", Console[1])
 
@@ -75,6 +77,7 @@ function test_gain_player_xp_in_instance()
     assertEqual(0.3, Addon.instances["BRD"].total_gained_lvl)
     assertEqual(20, Addon.instances["BRD"]:totalTime())
 
+    -- Calling the slash command
     SlashCmdList["XPBUDDY"]()
     assertEqual(4, #Console)
     assertEqual("Session (0:00:30) Gained 60xp (120xp/min) / Lvl: 60% (7200%/h)", Console[2])
