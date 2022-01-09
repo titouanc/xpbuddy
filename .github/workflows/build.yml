@@ -30,9 +30,10 @@ jobs:
 
     steps:
     - name: Get associated Github release
-      if: github.event_name == 'release'
       id: get_release
       uses: bruceadams/get-release@v1.2.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - uses: actions/checkout@v2
 
@@ -41,6 +42,8 @@ jobs:
 
     - name: Publish to Github Release
       uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.get_release.outputs.upload_url }}
         asset_path: xpbuddy-${{ steps.get_release.outputs.tag_name }}.zip
