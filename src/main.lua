@@ -56,8 +56,8 @@ function Addon:UNIT_PET_EXPERIENCE()
     end
 end
 
-SLASH_XPMETER1 = "/xpmeter"
-SlashCmdList["XPMETER"] = function(msg)
+SLASH_XPBUDDY1 = "/xpbuddy"
+SlashCmdList["XPBUDDY"] = function(msg)
     print(Addon.session:toString())
     if #Addon.instances > 0 then
         print("Instances:")
