@@ -2,7 +2,7 @@ local builtin_print = print
 
 Console = {}
 
-print = function (...) table.insert(Console, {...}) end
+print = function (text) table.insert(Console, text) end
 
 -- Compat Lua5.3 / Lua 5.1
 if not unpack then unpack = table.unpack end
@@ -68,11 +68,11 @@ local function runTests()
         if func_name:sub(1, 5) == "test_" then
             beforeTestFunction()
             local status_text
-            local ok, retval = pcall(func)
+            local ok, retval = xpcall(func, debug.traceback)
             if ok then
                 builtin_print("\x1b[32m OK \x1b[0m " .. func_name)
             else
-                builtin_print("\x1b[31mFAIL\x1b[0m " .. func_name ..  " \x1b[37m(" .. retval .. ")\x1b0m")
+                builtin_print("\x1b[31mFAIL\x1b[0m " .. func_name ..  " \x1b[37m" .. retval .. "\x1b[0m")
                 failed = true
             end
         end

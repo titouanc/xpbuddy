@@ -56,6 +56,8 @@ function test_gain_player_xp_in_instance()
     assertEqual(nil, Addon.current_instance)
     assertEqual(20, Addon.session:totalTime())
     assertEqual(20, Addon.instances["BRD"]:totalTime())
+    assertEqual(1, #Console)
+    assertEqual("BRD (0:00:20) Gained 30xp (90xp/min) / Lvl: 30% (5400%/h)", Console[1])
 
     -- "Kill 1 mob for 30xp" (lvl1=100xp)
     GetTime_VALUE = {30}
