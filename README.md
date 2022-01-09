@@ -24,3 +24,22 @@ To see the actual status of your (and your pets) XP gains, you can type
 ```
 /xpbuddy
 ```
+
+## Development
+
+### Building the addon
+
+```shell
+make dist
+```
+
+Then copy the folder `xpmeter` in Wow's `Interface/Addons`
+
+
+### Running tests
+
+```shell
+make test
+```
+
+Look in tests/ to see how test functions look like.
