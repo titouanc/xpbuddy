@@ -5,6 +5,14 @@ XPMeter = {
     total_gained_lvl = 0
 }
 
+local function round(num)
+    if num % 1 > 0.5 then
+        return math.ceil(num)
+    else
+        return math.floor(num)
+    end
+end
+
 function XPMeter:new(name, getCurrentXp)
     local res = {
         name = name,
@@ -64,14 +72,25 @@ function XPMeter:toString()
     local minutes = math.floor(dt / 60) % 60
     local seconds = math.floor(dt) % 60
 
+    local gained_level_percent = 100 * self.total_gained_lvl
+
+    local xp_per_min, lvl_per_h
+    if dt == 0 then
+        xp_per_min = 0
+        lvl_per_h = 0
+    else
+        xp_per_min = 60 * self.total_gained_xp / dt
+        lvl_per_h = 3600 * gained_level_percent / dt
+    end
+
     return string.format(
         "%s (%d:%02d:%02d) Gained %dxp (%dxp/min) / Lvl: %d%% (%d%%/h)",
         self.name, hours, minutes, seconds,
         self.total_gained_xp,
-        60 * self.total_gained_xp / dt,
-        100 * self.total_gained_lvl,
-        100 * 3600 * self.total_gained_lvl / dt
-    )   
+        round(xp_per_min),
+        round(gained_level_percent),
+        round(lvl_per_h)
+    )
 end
 
 function XPMeter:start()

@@ -37,16 +37,18 @@ end
 function Addon:UNIT_PET()
     local pet_name = UnitName("pet")
 
+    if self.current_pet and self.current_pet ~= pet_name then
+        self.current_pet:stop()
+        print(self.current_pet:toString())
+        self.current_pet = nil
+    end
+
     if pet_name then
         if not self.pets[pet_name] then
             self.pets[pet_name] = XPMeter:forPet(pet_name)
         end
         self.current_pet = self.pets[pet_name]
         self.current_pet:start()
-    elseif self.current_pet then
-        self.current_pet:stop()
-        print(self.current_pet:toString())
-        self.current_pet = nil
     end
 end
 
@@ -56,16 +58,21 @@ function Addon:UNIT_PET_EXPERIENCE()
     end
 end
 
+local function isEmpty(tab)
+    for _, __ in pairs(tab) do return false end
+    return true
+end
+
 SLASH_XPBUDDY1 = "/xpbuddy"
-SlashCmdList["XPBUDDY"] = function(msg)
+SlashCmdList["XPBUDDY"] = function()
     print(Addon.session:toString())
-    if #Addon.instances > 0 then
+    if not isEmpty(Addon.instances) then
         print("Instances:")
         for _, instance in pairs(Addon.instances) do
             print("- " .. instance:toString())
         end
     end
-    if #Addon.pets > 0 then
+    if not isEmpty(Addon.pets) then
         print("Pets:")
         for _, pet in pairs(Addon.pets) do
             print("- " .. pet:toString())

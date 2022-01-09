@@ -2,7 +2,12 @@ local builtin_print = print
 
 Console = {}
 
-print = function (text) table.insert(Console, text) end
+print = function (text, ...)
+    for _, t in ipairs({...}) do
+        text = text .. "\t" .. t
+    end
+    table.insert(Console, text)
+end
 
 -- Compat Lua5.3 / Lua 5.1
 if not unpack then unpack = table.unpack end
@@ -73,6 +78,13 @@ local function runTests()
                 builtin_print("\x1b[32m OK \x1b[0m " .. func_name)
             else
                 builtin_print("\x1b[31mFAIL\x1b[0m " .. func_name ..  " \x1b[37m" .. retval .. "\x1b[0m")
+                if #Console > 0 then
+                    builtin_print("\n    ---------- Console output ----------")
+                    for _, text in ipairs(Console) do
+                        builtin_print("    " .. text)
+                    end
+                    builtin_print("    ------------------------------------")
+                end
                 failed = true
             end
         end
