@@ -75,9 +75,9 @@ local function runTests()
             local status_text
             local ok, retval = xpcall(func, debug.traceback)
             if ok then
-                builtin_print("\x1b[32m OK \x1b[0m " .. func_name)
+                builtin_print("\27[32m OK \27[0m " .. func_name)
             else
-                builtin_print("\x1b[31mFAIL\x1b[0m " .. func_name ..  " \x1b[37m" .. retval .. "\x1b[0m")
+                builtin_print("\27[31mFAIL\27[0m " .. func_name ..  " \27[37m" .. retval .. "\27[0m")
                 if #Console > 0 then
                     builtin_print("\n    ---------- Console output ----------")
                     for _, text in ipairs(Console) do
