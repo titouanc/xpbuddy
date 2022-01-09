@@ -1,6 +1,6 @@
 ## Interface: 20502
 ## Title: XPMeter
-## Author: iTitou
+## Author: iTitou & BJRINT
 ## Version: ${VERSION}
 
 meter.lua
