@@ -1,5 +1,6 @@
 ## Interface: 20502
-## Title: XPMeter
+## Title: XP Buddy |cff888888(v ${VERSION})
+## Notes: XP Buddy lets you monitor XP gains for your player, pets and instances
 ## Author: iTitou & BJRINT
 ## Version: ${VERSION}
 
