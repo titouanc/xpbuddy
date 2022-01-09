@@ -1,3 +1,6 @@
+-- Compat Lua5.3 / Lua 5.1
+if not unpack then unpack = table.unpack end
+
 -- Mocks for Wow API
 local mock_functions = {
     GetTime = {0},
@@ -11,7 +14,7 @@ local mock_functions = {
 for func_name, default_value in pairs(mock_functions) do
     _G[func_name .. "_VALUE"] = default_value
     _G[func_name] = function (...)
-        return table.unpack(_G[func_name .. "_VALUE"])
+        return unpack(_G[func_name .. "_VALUE"])
     end
 end
 
@@ -40,6 +43,7 @@ local function runTests()
     local failed = false
 
     for filename in io.popen('dir tests'):lines() do
+        -- require without the ".lua" extension
         require('tests/' .. filename:sub(1, filename:len() - 4))
     end
 
