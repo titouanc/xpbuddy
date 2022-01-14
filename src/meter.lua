@@ -5,6 +5,11 @@ XPMeter = {
     total_gained_lvl = 0
 }
 
+local translations = {
+    enUS="%s (%d:%02d:%02d) Gained %dxp (%dxp/min) / Lvl: %d%% (%d%%/h)",
+    frFR="%s (%d:%02d:%02d) Gagné %dpx (%dpx/min) / Niv: %d%% (%d%%/h)"
+}
+
 local function round(num)
     if num % 1 > 0.5 then
         return math.ceil(num)
@@ -65,12 +70,19 @@ function XPMeter:totalTime()
     end
 end
 
-function XPMeter:toString()
+function XPMeter:toString(lang)
     local dt = self:totalTime()
-
     local hours = math.floor(dt / 3600)
     local minutes = math.floor(dt / 60) % 60
     local seconds = math.floor(dt) % 60
+
+    if not lang then
+        lang = GetLocale()
+    end
+    local text_fmt = translations[lang]
+    if not text_fmt then
+        text_fmt = translations["enUS"]
+    end
 
     local gained_level_percent = 100 * self.total_gained_lvl
 
@@ -84,7 +96,7 @@ function XPMeter:toString()
     end
 
     return string.format(
-        "%s (%d:%02d:%02d) Gained %dxp (%dxp/min) / Lvl: %d%% (%d%%/h)",
+        text_fmt,
         self.name, hours, minutes, seconds,
         self.total_gained_xp,
         round(xp_per_min),
