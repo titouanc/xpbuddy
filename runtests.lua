@@ -20,7 +20,8 @@ local mock_functions = {
     GetInstanceInfo = {"Azeroth"},
     GetPetExperience = {0, 100},
     IsInInstance = {false},
-    UnitName = {nil}
+    UnitName = {nil},
+    GetLocale = {"enUS"}
 }
 
 for func_name, default_value in pairs(mock_functions) do
