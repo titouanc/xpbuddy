@@ -3,7 +3,7 @@ if not XPMeter then return end
 local Addon = {}
 
 function Addon:init()
-    self.session = XPMeter:forPlayer("Session")
+    self.session = nil
     self.pets = {}
     self.current_pet = nil
     self.instances = {}
@@ -13,6 +13,9 @@ end
 Addon:init()
 
 function Addon:PLAYER_ENTERING_WORLD()
+    if self.session == nil then
+        self.session = XPMeter:forPlayer("Session")
+    end
     if IsInInstance() then
         local instance_name = GetInstanceInfo()
         if not self.instances[instance_name] then

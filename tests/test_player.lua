@@ -84,3 +84,15 @@ function test_gain_player_xp_in_instance()
     assertEqual("Instances:", Console[3])
     assertEqual("- BRD (0:00:20) Gained 30xp (90xp/min) / Lvl: 30% (5400%/h)", Console[4])
 end
+
+function test_gain_xp_from_mid_level()
+    UnitXP_VALUE = {30}
+    Addon:PLAYER_ENTERING_WORLD()
+
+    assertEqual(0, Addon.session.total_gained_xp)
+
+    UnitXP_VALUE = {50}
+    GetTime_VALUE = {10}
+    Addon:PLAYER_XP_UPDATE()
+    assertEqual(20, Addon.session.total_gained_xp)
+end
