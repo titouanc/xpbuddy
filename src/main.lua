@@ -40,7 +40,7 @@ end
 function Addon:UNIT_PET()
     local pet_name = UnitName("pet")
 
-    if self.current_pet and self.current_pet ~= pet_name then
+    if self.current_pet and self.current_pet.name ~= pet_name then
         self.current_pet:stop()
         print(self.current_pet:toString())
         self.current_pet = nil
