@@ -96,3 +96,15 @@ function test_gain_xp_from_mid_level()
     Addon:PLAYER_XP_UPDATE()
     assertEqual(20, Addon.session.total_gained_xp)
 end
+
+function test_no_print_when_no_xp_gain_in_instance()
+    IsInInstance_VALUE = {true}
+    GetInstanceInfo_VALUE = {"BRD"}
+    Addon:PLAYER_ENTERING_WORLD()
+    assertEqual(0, #Console)
+
+    IsInInstance_VALUE = {false}
+    GetInstanceInfo_VALUE = {"Azeroth"}
+    Addon:PLAYER_ENTERING_WORLD()
+    assertEqual(0, #Console)
+end
