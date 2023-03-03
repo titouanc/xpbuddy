@@ -25,7 +25,9 @@ function Addon:PLAYER_ENTERING_WORLD()
         self.current_instance:start()
     elseif self.current_instance then
         self.current_instance:stop()
-        print(self.current_instance:toString())
+        if self.current_instance:hasXp() then
+            print(self.current_instance:toString())
+        end
         self.current_instance = nil
     end
 end
@@ -42,7 +44,9 @@ function Addon:UNIT_PET()
 
     if self.current_pet and self.current_pet.name ~= pet_name then
         self.current_pet:stop()
-        print(self.current_pet:toString())
+        if self.current_pet:hasXp() then
+            print(self.current_pet:toString())
+        end
         self.current_pet = nil
     end
 

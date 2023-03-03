@@ -119,3 +119,7 @@ function XPMeter:stop()
         self.stopped = true
     end
 end
+
+function XPMeter:hasXp()
+    return self.total_gained_xp > 0
+end
