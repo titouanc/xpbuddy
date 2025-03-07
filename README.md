@@ -30,7 +30,9 @@ To see the actual status of your (and your pets) XP gains, you can type
 To release a new version:
 
 1. Create a new Release on Github (https://github.com/titouanc/xpbuddy/releases)
-2. The CI will build the addon, and publish it in the Github Release assets
+2. The CI will build the addon, and
+    - publish it in the Github Release assets
+    - publish it to Curseforge
 
 ## Development
 

@@ -49,3 +49,12 @@ jobs:
         asset_path: xpbuddy-${{ steps.get_release.outputs.tag_name }}.zip
         asset_name: xpbuddy-${{ steps.get_release.outputs.tag_name }}.zip
         asset_content_type: application/zip
+
+    - name: Publish to Curseforge
+      uses: itsmeow/curseforge-upload@v3
+      with:
+        file_path: xpbuddy-${{ steps.get_release.outputs.tag_name }}.zip
+        game_endpoint: wow
+        token: ${{ secrets.CURSEFORGE_API_TOKEN}}
+        project_id: ${{ secrets.CURSEFORGE_PROJECT_ID }}
+        game_versions: WoW Classic,WoW Burning Crusade Classic,WoW Wrath of the Lich King Classic
